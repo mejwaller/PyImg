@@ -7,22 +7,15 @@ def threshold(imageArray):
     balanceAr = []
     newAr = imageArray
     for eachRow in imageArray:
-        #print eachRow
         for eachPix in eachRow:  
-            #print eachPix[:3]     
             #avgNum = reduce(lambda x, y: x + y, eachPix[:3])            
             avgNum=sum(eachPix[:3])
-            #print avgNum            
             avgNum /= len(eachPix[:3])            
-            #print avgNum
             balanceAr.append(avgNum)
-            
-            #time.sleep(5)
+
     #balance = reduce(lambda x, y: x + y, balanceAr) / len(balanceAr)
     balance = sum(balanceAr)/len(balanceAr)
     
-    #print balance
-    #time.sleep(5)
     for eachRow in newAr:
         for eachPix in eachRow:
             #if reduce(lambda x, y: x + y, eachPix[:3]) / len(eachPix[:3]) > balance:
@@ -36,22 +29,24 @@ def threshold(imageArray):
                 eachPix[1] = 0
                 eachPix[2] = 0
                 eachPix[3] = 255
+                
     return newAr
 
+#create arrays as float for thresholding to avoid int arithmetic innacuracies
 i = Image.open('images/numbers/0.1.png')
-iar = np.array(i)
+iar = np.array(i, dtype=np.float32)
 i2 = Image.open('images/numbers/y0.4.png')
-iar2 = np.array(i2)
+iar2 = np.array(i2, dtype=np.float32)
 i3 = Image.open('images/numbers/y0.5.png')
-iar3 = np.array(i3)
+iar3 = np.array(i3, dtype=np.float32)
 i4 = Image.open('images/sentdex.png')
-iar4 = np.array(i4)
+iar4 = np.array(i4, dtype=np.float32)
 
-iar = threshold(iar)
-iar2 = threshold(iar2)
-#print iar3
-iar3 = threshold(iar3)
-iar4 = threshold(iar4)
+#convert back to uint8 after thresholding for imshow...must be uint8!
+iar = threshold(iar).astype('uint8')
+iar2 = threshold(iar2).astype('uint8')
+iar3 = threshold(iar3).astype('uint8')
+iar4 = threshold(iar4).astype('uint8')
 
 
 fig = plt.figure()
